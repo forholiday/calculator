@@ -56,24 +56,117 @@
     <input type="number" id="quantityS" min="0" value="0">
   </div>
 
+  <!-- M 사이즈 -->
+  <div class="section">
+    <h2 id="size-m-title">M 사이즈</h2>
+    <label for="daysM" id="days-m-label">보관 기간 (일):</label>
+    <select id="daysM">
+      <option value="0">선택</option>
+      <option value="1">1 Day</option>
+      <option value="2">2 Days</option>
+      <option value="3">3 Days</option>
+      <option value="4">4 Days</option>
+      <option value="5">5 Days</option>
+      <option value="6">6 Days</option>
+      <option value="7">7 Days</option>
+      <option value="8">8 Days</option>
+    </select>
+    <label for="quantityM" id="quantity-m-label">수량:</label>
+    <input type="number" id="quantityM" min="0" value="0">
+  </div>
+
+  <!-- L 사이즈 -->
+  <div class="section">
+    <h2 id="size-l-title">L 사이즈</h2>
+    <label for="daysL" id="days-l-label">보관 기간 (일):</label>
+    <select id="daysL">
+      <option value="0">선택</option>
+      <option value="1">1 Day</option>
+      <option value="2">2 Days</option>
+      <option value="3">3 Days</option>
+      <option value="4">4 Days</option>
+      <option value="5">5 Days</option>
+      <option value="6">6 Days</option>
+      <option value="7">7 Days</option>
+      <option value="8">8 Days</option>
+    </select>
+    <label for="quantityL" id="quantity-l-label">수량:</label>
+    <input type="number" id="quantityL" min="0" value="0">
+  </div>
+
+  <!-- XL 사이즈 -->
+  <div class="section">
+    <h2 id="size-xl-title">XL 사이즈</h2>
+    <label for="daysXL" id="days-xl-label">보관 기간 (일):</label>
+    <select id="daysXL">
+      <option value="0">선택</option>
+      <option value="1">1 Day</option>
+      <option value="2">2 Days</option>
+      <option value="3">3 Days</option>
+      <option value="4">4 Days</option>
+      <option value="5">5 Days</option>
+      <option value="6">6 Days</option>
+      <option value="7">7 Days</option>
+      <option value="8">8 Days</option>
+    </select>
+    <label for="quantityXL" id="quantity-xl-label">수량:</label>
+    <input type="number" id="quantityXL" min="0" value="0">
+  </div>
+
   <!-- 결과 -->
   <p id="result-label">총 보관 요금: <span id="result">0 WON</span></p>
 
   <script>
+    // 요금표
+    const prices = {
+      S: [10000, 14000, 21000, 28000, 35000, 42000, 49000, 56000],
+      M: [12000, 16000, 24000, 32000, 40000, 48000, 56000, 64000],
+      L: [15000, 20000, 30000, 40000, 50000, 60000, 70000, 80000],
+      XL: [18000, 24000, 36000, 48000, 60000, 72000, 84000, 96000],
+    };
+
     // 번역 데이터
     const translations = {
       ko: {
         title: "보관요금 계산기",
+
         sizeSTitle: "S 사이즈",
         daysSLabel: "보관 기간 (일):",
         quantitySLabel: "수량:",
+
+        sizeMTitle: "M 사이즈",
+        daysMLabel: "보관 기간 (일):",
+        quantityMLabel: "수량:",
+
+        sizeLTitle: "L 사이즈",
+        daysLLabel: "보관 기간 (일):",
+        quantityLLabel: "수량:",
+
+        sizeXLTitle: "XL 사이즈",
+        daysXLLabel: "보관 기간 (일):",
+        quantityXLLabel: "수량:",
+
         resultLabel: "총 보관 요금:",
       },
       en: {
         title: "Storage Fee Calculator",
+
         sizeSTitle: "Size S",
         daysSLabel: "Storage Period (Days):",
         quantitySLabel: "Quantity:",
+
+        sizeMTitle: "Size M",
+        daysMLabel: "Storage Period (Days):",
+        quantityMLabel: "Quantity:",
+
+        sizeLTitle: "Size L",
+        daysLLabel: "Storage Period (Days):",
+        quantityLLabel: "Quantity:",
+
+        sizeXLTitle: "Size XL",
+        daysXLLabel: "Storage Period (Days):",
+        quantityXLLabel: "Quantity:",
+
         resultLabel: "Total Storage Fee:",
       },
       ja: {
@@ -81,6 +174,19 @@
         sizeSTitle: "S サイズ",
         daysSLabel: "保管期間 (日):",
         quantitySLabel: "数量:",
+
+        sizeMTitle: "M サイズ",
+        daysMLabel: "保管期間 (日):",
+        quantityMLabel: "数量:",
+
+        sizeLTitle: "L サイズ",
+        daysLLabel: "保管期間 (日):",
+        quantityLLabel: "数量:",
+
+        sizeXLTitle: "XL サイズ",
+        daysXLLabel: "保管期間 (日):",
+        quantityXLLabel: "数量:",
+
         resultLabel: "合計保管料金:",
       },
       zh: {
@@ -88,6 +194,19 @@
         sizeSTitle: "S 尺寸",
         daysSLabel: "保管期限 (天):",
         quantitySLabel: "数量:",
+
+        sizeMTitle: "M 尺寸",
+        daysMLabel: "保管期限 (天):",
+        quantityMLabel: "数量:",
+
+        sizeLTitle: "L 尺寸",
+        daysLLabel: "保管期限 (天):",
+        quantityLLabel: "数量:",
+
+        sizeXLTitle: "XL 尺寸",
+        daysXLLabel: "保管期限 (天):",
+        quantityXLLabel: "数量:",
+
         resultLabel: "总保管费用:",
       },
     };
@@ -97,17 +216,44 @@
       const lang = document.getElementById("language").value;
       const texts = translations[lang];
 
+      // 각 요소 업데이트
       document.getElementById("title").textContent = texts.title;
       document.getElementById("size-s-title").textContent = texts.sizeSTitle;
       document.getElementById("days-s-label").textContent = texts.daysSLabel;
       document.getElementById("quantity-s-label").textContent = texts.quantitySLabel;
+      document.getElementById("size-m-title").textContent = texts.sizeMTitle;
+      document.getElementById("days-m-label").textContent = texts.daysMLabel;
+      document.getElementById("quantity-m-label").textContent = texts.quantityMLabel;
+      document.getElementById("size-l-title").textContent = texts.sizeLTitle;
+      document.getElementById("days-l-label").textContent = texts.daysLLabel;
+      document.getElementById("quantity-l-label").textContent = texts.quantityLLabel;
+      document.getElementById("size-xl-title").textContent = texts.sizeXLTitle;
+      document.getElementById("days-xl-label").textContent = texts.daysXLLabel;
+      document.getElementById("quantity-xl-label").textContent = texts.quantityXLLabel;
       document.getElementById("result-label").textContent = texts.resultLabel;
     }
 
-    // 언어 선택 이벤트 리스너 추가
-    document.getElementById("language").addEventListener("change", changeLanguage);
+    // 요금 계산 함수
+    function calculateTotal() {
+      let total = 0;
 
-    // 기본 언어 설정
+      // 모든 사이즈 계산
+      ["S", "M", "L", "XL"].forEach(size => {
+        const days = parseInt(document.getElementById(`days${size}`).value) || 0;
+        const quantity = parseInt(document.getElementById(`quantity${size}`).value) || 0;
+        if (days > 0) total += prices[size][days - 1] * quantity;
+      });
+
+      document.getElementById('result').textContent = `${total.toLocaleString()} WON`;
+    }
+
+    // 이벤트 리스너 추가
+    document.getElementById("language").addEventListener("change", changeLanguage);
+    document.querySelectorAll('select, input').forEach(input => {
+      input.addEventListener('change', calculateTotal);
+    });
+
+    // 초기 언어 설정
     changeLanguage();
   </script>
 </body>
