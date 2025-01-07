@@ -1,260 +1,174 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>보관요금 계산기</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    h1 {
-      color: #333;
-    }
-    label, input, select {
-      margin: 10px 0;
-      display: block;
-    }
-    p {
-      font-size: 1.2em;
-      color: #555;
-    }
-    .section {
-      margin-bottom: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Fee Calculator(Cash)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <!-- 언어 선택 -->
-  <label for="language">언어 선택 (Language):</label>
-  <select id="language">
-    <option value="ko">한국어 (Korean)</option>
-    <option value="en">English</option>
-    <option value="ja">日本語 (Japanese)</option>
-    <option value="zh">中文 (Chinese)</option>
-  </select>
-
-  <h1 id="title">보관요금 계산기(현금)</h1>
-
-  <!-- S 사이즈 -->
-  <div class="section">
-    <h2 id="size-s-title">S 사이즈</h2>
-    <label for="daysS" id="days-s-label">보관 기간 (일):</label>
-    <select id="daysS">
-      <option value="0">선택</option>
-      <option value="1">1 Day</option>
-      <option value="2">2 Days</option>
-      <option value="3">3 Days</option>
-      <option value="4">4 Days</option>
-      <option value="5">5 Days</option>
-      <option value="6">6 Days</option>
-      <option value="7">7 Days</option>
-      <option value="8">8 Days</option>
+    <h1 id="title">Storage Fee Calculator(Cash)</h1>
+    <label for="language-select">Select Language:</label>
+    <select id="language-select" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="ko">한국어</option>
+        <option value="ja">日本語</option>
+        <option value="zh">中文</option>
     </select>
-    <label for="quantityS" id="quantity-s-label">수량:</label>
-    <input type="number" id="quantityS" min="0" value="0">
-  </div>
 
-  <!-- M 사이즈 -->
-  <div class="section">
-    <h2 id="size-m-title">M 사이즈</h2>
-    <label for="daysM" id="days-m-label">보관 기간 (일):</label>
-    <select id="daysM">
-      <option value="0">선택</option>
-      <option value="1">1 Day</option>
-      <option value="2">2 Days</option>
-      <option value="3">3 Days</option>
-      <option value="4">4 Days</option>
-      <option value="5">5 Days</option>
-      <option value="6">6 Days</option>
-      <option value="7">7 Days</option>
-      <option value="8">8 Days</option>
-    </select>
-    <label for="quantityM" id="quantity-m-label">수량:</label>
-    <input type="number" id="quantityM" min="0" value="0">
-  </div>
+    <form id="calculator-form">
+        <table>
+            <thead>
+                <tr>
+                    <th id="size-header">Size</th>
+                    <th id="quantity-header">Quantity</th>
+                    <th id="days-header">Number of Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>S</td>
+                    <td><input type="number" id="quantity-S" min="0" value="0"></td>
+                    <td><input type="number" id="days-S" min="1" max="8" value="1"></td>
+                </tr>
+                <tr>
+                    <td>M</td>
+                    <td><input type="number" id="quantity-M" min="0" value="0"></td>
+                    <td><input type="number" id="days-M" min="1" max="8" value="1"></td>
+                </tr>
+                <tr>
+                    <td>L</td>
+                    <td><input type="number" id="quantity-L" min="0" value="0"></td>
+                    <td><input type="number" id="days-L" min="1" max="8" value="1"></td>
+                </tr>
+                <tr>
+                    <td>XL</td>
+                    <td><input type="number" id="quantity-XL" min="0" value="0"></td>
+                    <td><input type="number" id="days-XL" min="1" max="8" value="1"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" id="calculate-button" onclick="calculateTotal()">Calculate Total</button>
+    </form>
 
-  <!-- L 사이즈 -->
-  <div class="section">
-    <h2 id="size-l-title">L 사이즈</h2>
-    <label for="daysL" id="days-l-label">보관 기간 (일):</label>
-    <select id="daysL">
-      <option value="0">선택</option>
-      <option value="1">1 Day</option>
-      <option value="2">2 Days</option>
-      <option value="3">3 Days</option>
-      <option value="4">4 Days</option>
-      <option value="5">5 Days</option>
-      <option value="6">6 Days</option>
-      <option value="7">7 Days</option>
-      <option value="8">8 Days</option>
-    </select>
-    <label for="quantityL" id="quantity-l-label">수량:</label>
-    <input type="number" id="quantityL" min="0" value="0">
-  </div>
+    <div class="result" id="result"></div>
 
-  <!-- XL 사이즈 -->
-  <div class="section">
-    <h2 id="size-xl-title">XL 사이즈</h2>
-    <label for="daysXL" id="days-xl-label">보관 기간 (일):</label>
-    <select id="daysXL">
-      <option value="0">선택</option>
-      <option value="1">1 Day</option>
-      <option value="2">2 Days</option>
-      <option value="3">3 Days</option>
-      <option value="4">4 Days</option>
-      <option value="5">5 Days</option>
-      <option value="6">6 Days</option>
-      <option value="7">7 Days</option>
-      <option value="8">8 Days</option>
-    </select>
-    <label for="quantityXL" id="quantity-xl-label">수량:</label>
-    <input type="number" id="quantityXL" min="0" value="0">
-  </div>
+    <script>
+        const translations = {
+            en: {
+                title: "Storage Fee Calculator(Cash)",
+                size: "Size",
+                quantity: "Quantity",
+                days: "Number of Days",
+                calculate: "Calculate Total",
+                totalCost: "Total Cost:"
+            },
+            ko: {
+                title: "보관료 계산기(현금)",
+                size: "크기",
+                quantity: "수량",
+                days: "보관 일수",
+                calculate: "총 비용 계산",
+                totalCost: "총 비용:"
+            },
+            ja: {
+                title: "保管料金計算機（現金）",
+                size: "サイズ",
+                quantity: "数量",
+                days: "日数",
+                calculate: "合計を計算する",
+                totalCost: "合計費用:"
+            },
+            zh: {
+                title: "存储费用计算器（现金）",
+                size: "大小",
+                quantity: "数量",
+                days: "天数",
+                calculate: "计算总费用",
+                totalCost: "总费用:"
+            }
+        };
 
-  <!-- 결과 -->
-  <p id="result-label">총 보관 요금: <span id="result">0 WON</span></p>
+        const cashRatesWON = {
+            "S": [10000, 14000, 21000, 28000, 35000, 42000, 49000, 56000],
+            "M": [12000, 16000, 24000, 32000, 40000, 48000, 56000, 64000],
+            "L": [15000, 20000, 30000, 40000, 50000, 60000, 70000, 80000],
+            "XL": [18000, 24000, 36000, 48000, 60000, 72000, 84000, 96000]
+        };
 
-  <script>
-    // 요금표
-    const prices = {
-      S: [10000, 14000, 21000, 28000, 35000, 42000, 49000, 56000],
-      M: [12000, 16000, 24000, 32000, 40000, 48000, 56000, 64000],
-      L: [15000, 20000, 30000, 40000, 50000, 60000, 70000, 80000],
-      XL: [18000, 24000, 36000, 48000, 60000, 72000, 84000, 96000],
-    };
+        const cashRatesUSD = {
+            "S": [8, 11, 16, 21, 27, 32, 37, 43],
+            "M": [9, 12, 18, 24, 30, 36, 42, 48],
+            "L": [11, 15, 23, 30, 38, 45, 52, 60],
+            "XL": [14, 18, 27, 36, 45, 54, 63, 72]
+        };
 
-    // 번역 데이터
-    const translations = {
-      ko: {
-        title: "보관요금 계산기(현금)",
+        function changeLanguage() {
+            const lang = document.getElementById("language-select").value;
+            const translation = translations[lang];
 
-        sizeSTitle: "S 사이즈",
-        daysSLabel: "보관 기간 (일):",
-        quantitySLabel: "수량:",
+            document.getElementById("title").textContent = translation.title;
+            document.getElementById("size-header").textContent = translation.size;
+            document.getElementById("quantity-header").textContent = translation.quantity;
+            document.getElementById("days-header").textContent = translation.days;
+            document.getElementById("calculate-button").textContent = translation.calculate;
+        }
 
-        sizeMTitle: "M 사이즈",
-        daysMLabel: "보관 기간 (일):",
-        quantityMLabel: "수량:",
+        function calculateFee(size, quantity, days) {
+            if (days <= 0 || quantity <= 0) return { won: 0, usd: 0 };
 
-        sizeLTitle: "L 사이즈",
-        daysLLabel: "보관 기간 (일):",
-        quantityLLabel: "수량:",
+            const costWON = cashRatesWON[size][days - 1] * quantity;
+            const costUSD = cashRatesUSD[size][days - 1] * quantity;
 
-        sizeXLTitle: "XL 사이즈",
-        daysXLLabel: "보관 기간 (일):",
-        quantityXLLabel: "수량:",
+            return { won: costWON, usd: costUSD };
+        }
 
-        resultLabel: "총 보관 요금:",
-      },
-      en: {
-        title: "Storage Fee Calculator(현금)",
+        function calculateTotal() {
+            const sizes = ["S", "M", "L", "XL"];
+            let totalWON = 0;
+            let totalUSD = 0;
 
-        sizeSTitle: "Size S",
-        daysSLabel: "Storage Period (Days):",
-        quantitySLabel: "Quantity:",
+            sizes.forEach(size => {
+                const quantity = parseInt(document.getElementById(`quantity-${size}`).value) || 0;
+                const days = parseInt(document.getElementById(`days-${size}`).value) || 0;
 
-        sizeMTitle: "Size M",
-        daysMLabel: "Storage Period (Days):",
-        quantityMLabel: "Quantity:",
+                const { won, usd } = calculateFee(size, quantity, days);
+                totalWON += won;
+                totalUSD += usd;
+            });
 
-        sizeLTitle: "Size L",
-        daysLLabel: "Storage Period (Days):",
-        quantityLLabel: "Quantity:",
-
-        sizeXLTitle: "Size XL",
-        daysXLLabel: "Storage Period (Days):",
-        quantityXLLabel: "Quantity:",
-
-        resultLabel: "Total Storage Fee:",
-      },
-      ja: {
-        title: "保管料金計算機(현금)",
-        sizeSTitle: "S サイズ",
-        daysSLabel: "保管期間 (日):",
-        quantitySLabel: "数量:",
-
-        sizeMTitle: "M サイズ",
-        daysMLabel: "保管期間 (日):",
-        quantityMLabel: "数量:",
-
-        sizeLTitle: "L サイズ",
-        daysLLabel: "保管期間 (日):",
-        quantityLLabel: "数量:",
-
-        sizeXLTitle: "XL サイズ",
-        daysXLLabel: "保管期間 (日):",
-        quantityXLLabel: "数量:",
-
-        resultLabel: "合計保管料金:",
-      },
-      zh: {
-        title: "保管费用计算器(현금)",
-        sizeSTitle: "S 尺寸",
-        daysSLabel: "保管期限 (天):",
-        quantitySLabel: "数量:",
-
-        sizeMTitle: "M 尺寸",
-        daysMLabel: "保管期限 (天):",
-        quantityMLabel: "数量:",
-
-        sizeLTitle: "L 尺寸",
-        daysLLabel: "保管期限 (天):",
-        quantityLLabel: "数量:",
-
-        sizeXLTitle: "XL 尺寸",
-        daysXLLabel: "保管期限 (天):",
-        quantityXLLabel: "数量:",
-
-        resultLabel: "总保管费用:",
-      },
-    };
-
-    // 언어 변경 함수
-    function changeLanguage() {
-      const lang = document.getElementById("language").value;
-      const texts = translations[lang];
-
-      // 각 요소 업데이트
-      document.getElementById("title").textContent = texts.title;
-      document.getElementById("size-s-title").textContent = texts.sizeSTitle;
-      document.getElementById("days-s-label").textContent = texts.daysSLabel;
-      document.getElementById("quantity-s-label").textContent = texts.quantitySLabel;
-      document.getElementById("size-m-title").textContent = texts.sizeMTitle;
-      document.getElementById("days-m-label").textContent = texts.daysMLabel;
-      document.getElementById("quantity-m-label").textContent = texts.quantityMLabel;
-      document.getElementById("size-l-title").textContent = texts.sizeLTitle;
-      document.getElementById("days-l-label").textContent = texts.daysLLabel;
-      document.getElementById("quantity-l-label").textContent = texts.quantityLLabel;
-      document.getElementById("size-xl-title").textContent = texts.sizeXLTitle;
-      document.getElementById("days-xl-label").textContent = texts.daysXLLabel;
-      document.getElementById("quantity-xl-label").textContent = texts.quantityXLLabel;
-      document.getElementById("result-label").textContent = texts.resultLabel;
-    }
-
-    // 요금 계산 함수
-    function calculateTotal() {
-      let total = 0;
-
-      // 모든 사이즈 계산
-      ["S", "M", "L", "XL"].forEach(size => {
-        const days = parseInt(document.getElementById(`days${size}`).value) || 0;
-        const quantity = parseInt(document.getElementById(`quantity${size}`).value) || 0;
-        if (days > 0) total += prices[size][days - 1] * quantity;
-      });
-
-      document.getElementById('result').textContent = `${total.toLocaleString()} WON`;
-    }
-
-    // 이벤트 리스너 추가
-    document.getElementById("language").addEventListener("change", changeLanguage);
-    document.querySelectorAll('select, input').forEach(input => {
-      input.addEventListener('change', calculateTotal);
-    });
-
-    // 초기 언어 설정
-    changeLanguage();
-  </script>
+            const lang = document.getElementById("language-select").value;
+            const translation = translations[lang];
+            document.getElementById('result').innerHTML = `
+                <p>${translation.totalCost}</p>
+                <ul>
+                    <li>${totalWON.toLocaleString()} WON</li>
+                    <li>$${totalUSD.toFixed(2)} USD</li>
+                </ul>
+            `;
+        }
+    </script>
 </body>
 </html>
